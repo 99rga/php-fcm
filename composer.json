@@ -1,0 +1,27 @@
+{
+  "name": "g9rga/php-fcm",
+  "description": "Php library to send push notification via google fcm",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dmitry Seleznov",
+      "email": "selether@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "g9rga\\phpFcm\\": ""
+    }
+  },
+  "require": {
+    "guzzlehttp/guzzle": "~6.3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~7.1.15"
+  },
+  "suggest": {
+    "guzzlehttp/guzzle": "Http client"
+  }
+}
