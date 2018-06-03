@@ -5,4 +5,4 @@ php:
   - 7.2
 before_script:
   - composer install --no-interaction --prefer-source --dev
-script: make test
+script: ./vendor/bin/phpunit
