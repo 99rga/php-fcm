@@ -102,14 +102,18 @@ class Client
 
     /**
      * @param TargetInterface $target
+     * @param BaseNotification $notification
      * @throws NotificationRequiredException
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function send(TargetInterface $target): ResponseInterface
+    public function send(TargetInterface $target, BaseNotification $notification): ResponseInterface
     {
+        $this->setNotification($notification);
+        
         $formsParams = [
             $target->getType() => $target->getValue()
         ];
+
         $formsParams = $this->fillNotifications($formsParams);
 
         if (!$this->notificationCheck) {
@@ -142,7 +146,7 @@ class Client
         return $requestParams;
     }
 
-    public function setNotification(BaseNotification $notification) {
+    private function setNotification(BaseNotification $notification) {
         switch ($notification) {
             case AndroidNotification::class:
                 $this->androidNotification = $notification;
