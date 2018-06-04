@@ -5,7 +5,6 @@ namespace g9rga\phpFcm\src;
 use g9rga\phpFcm\src\Exception\NotificationRequiredException;
 use g9rga\phpFcm\src\Notification\AndroidNotification;
 use g9rga\phpFcm\src\Notification\ApnsNotification;
-use g9rga\phpFcm\src\Notification\Notification;
 use g9rga\phpFcm\src\Notification\WebPushNotification;
 use g9rga\phpFcm\src\Target\TargetInterface;
 use GuzzleHttp\Client as GuzzleClient;
@@ -127,11 +126,11 @@ class Client
         }
         if ($this->apnsNotification) {
             $this->notificationCheck = true;
-            $requestParams['apns'] = $this->notification->toArray();
+            $requestParams['apns'] = $this->apnsNotification->toArray();
         }
         if ($this->webPushNotification) {
             $this->notificationCheck = true;
-            $requestParams['webpush'] = $this->notification->toArray();
+            $requestParams['webpush'] = $this->webPushNotification->toArray();
         }
 
         return $requestParams;
