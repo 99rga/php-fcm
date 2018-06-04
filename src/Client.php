@@ -5,6 +5,7 @@ namespace g9rga\phpFcm\src;
 use g9rga\phpFcm\src\Exception\NotificationRequiredException;
 use g9rga\phpFcm\src\Notification\AndroidNotification;
 use g9rga\phpFcm\src\Notification\ApnsNotification;
+use g9rga\phpFcm\src\Notification\BaseNotification;
 use g9rga\phpFcm\src\Notification\WebPushNotification;
 use g9rga\phpFcm\src\Target\TargetInterface;
 use GuzzleHttp\Client as GuzzleClient;
@@ -38,6 +39,11 @@ class Client
      * @var WebPushNotification
      */
     private $webPushNotification;
+
+    /**
+     * @var BaseNotification
+     */
+    private $notification;
 
     /**
      * @var bool
@@ -136,63 +142,20 @@ class Client
         return $requestParams;
     }
 
-    /**
-     * @return AndroidNotification
-     */
-    public function getAndroidNotification(): AndroidNotification
-    {
-        return $this->androidNotification;
-    }
-
-    /**
-     * @param AndroidNotification $androidNotification
-     *
-     * @return $this
-     */
-    public function setAndroidNotification(AndroidNotification $androidNotification)
-    {
-        $this->androidNotification = $androidNotification;
-
-        return $this;
-    }
-
-    /**
-     * @return ApnsNotification
-     */
-    public function getApnsNotification(): ApnsNotification
-    {
-        return $this->apnsNotification;
-    }
-
-    /**
-     * @param ApnsNotification $apnsNotification
-     *
-     * @return $this
-     */
-    public function setApnsNotification(ApnsNotification $apnsNotification)
-    {
-        $this->apnsNotification = $apnsNotification;
-
-        return $this;
-    }
-
-    /**
-     * @return WebPushNotification
-     */
-    public function getWebPushNotification(): WebPushNotification
-    {
-        return $this->webPushNotification;
-    }
-
-    /**
-     * @param WebPushNotification $webPushNotification
-     *
-     * @return $this
-     */
-    public function setWebPushNotification(WebPushNotification $webPushNotification)
-    {
-        $this->webPushNotification = $webPushNotification;
-
-        return $this;
+    public function setNotification(BaseNotification $notification) {
+        switch ($notification) {
+            case AndroidNotification::class:
+                $this->androidNotification = $notification;
+                break;
+            case ApnsNotification::class:
+                $this->apnsNotification = $notification;
+                break;
+            case WebPushNotification::class:
+                $this->webPushNotification = $notification;
+                break;
+            default:
+                $this->notification = $notification;
+                break;
+        }
     }
 }
