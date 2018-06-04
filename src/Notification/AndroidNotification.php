@@ -82,17 +82,29 @@ class AndroidNotification extends BaseNotification
      */
     public function toArray(): array
     {
-        return array_merge(parent::toArray(), [
-            'icon' => $this->icon,
-            'color' => $this->color,
-            'sound' => $this->sound,
-            'tag' => $this->tag,
-            'click_action' => $this->clickAction,
-            'body_loc_key' => $this->bodyLocKey,
-            'body_loc_args' => $this->bodyLocArgs,
-            'title_loc_key' => $this->titleLocKey,
-            'title_loc_args' => $this->titleLocArgs
-        ]);
+        $data = [
+            'collapse_key' => $this->collapseKey,
+            'priority' => $this->priority,
+            'ttl' => $this->ttl,
+            'restricted_package_name' => $this->restrictedPackageName,
+            'notification' => [
+                'icon' => $this->icon,
+                'color' => $this->color,
+                'sound' => $this->sound,
+                'tag' => $this->tag,
+                'click_action' => $this->clickAction,
+                'body_loc_key' => $this->bodyLocKey,
+                'body_loc_args' => $this->bodyLocArgs,
+                'title_loc_key' => $this->titleLocKey,
+                'title_loc_args' => $this->titleLocArgs
+            ]
+        ];
+
+        if ($this->data) {
+            $data['data'] = $this->data;
+        }
+
+        return $data;
     }
 
     /**
@@ -153,6 +165,10 @@ class AndroidNotification extends BaseNotification
      */
     public function setData(array $data)
     {
+        foreach ($data as &$value) {
+            $value = (string)$value;
+        }
+
         $this->data = $data;
 
         return $this;

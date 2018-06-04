@@ -2,7 +2,7 @@
 
 namespace g9rga\phpFcm\src;
 
-use g9rga\phpFcm\src\Exception\NotificationRequiredException;
+use g9rga\phpFcm\src\Cache\NullCache;
 use g9rga\phpFcm\src\Notification\AndroidNotification;
 use g9rga\phpFcm\src\Notification\ApnsNotification;
 use g9rga\phpFcm\src\Notification\BaseNotification;
@@ -10,10 +10,11 @@ use g9rga\phpFcm\src\Notification\WebPushNotification;
 use g9rga\phpFcm\src\Target\TargetInterface;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;
+use Psr\SimpleCache\CacheInterface;
 
 class Client
 {
-    private const DEFAULT_API_URL = 'https://fcm.googleapis.com/fcm/send';
+    private const API_URL = 'https://fcm.googleapis.com/v1/projects/%s/messages:send';
 
     /**
      * @var string
@@ -46,38 +47,26 @@ class Client
     private $notification;
 
     /**
-     * @var bool
+     * @var string
      */
-    private $notificationCheck = false;
+    private $projectName;
+
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
 
     /**
      * Client constructor
      * @param string $apiKey
+     * @param string $projectName
      */
-    public function __construct(string $apiKey)
+    public function __construct(string $apiKey, string $projectName)
     {
         $this->client = new GuzzleClient();
         $this->apiKey = $apiKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiKey(): string
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     * @param string $apiKey
-     *
-     * @return $this
-     */
-    public function setApiKey(string $apiKey)
-    {
-        $this->apiKey = $apiKey;
-
-        return $this;
+        $this->projectName = $projectName;
+        $this->cache = new NullCache();
     }
 
     /**
@@ -103,7 +92,6 @@ class Client
     /**
      * @param TargetInterface $target
      * @param BaseNotification $notification
-     * @throws NotificationRequiredException
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function send(TargetInterface $target, BaseNotification $notification): ResponseInterface
@@ -111,35 +99,32 @@ class Client
         $this->setNotification($notification);
         
         $formsParams = [
-            $target->getType() => $target->getValue()
+            $target->getType() => $target->getValue(),
+            'notification' => [
+                'title' => $this->notification->getTitle(),
+                'body' => $this->notification->getBody()
+            ]
         ];
 
         $formsParams = $this->fillNotifications($formsParams);
-
-        if (!$this->notificationCheck) {
-            throw new NotificationRequiredException('At least one notification required');
-        }
-        $this->notificationCheck = false;
-        return $this->client->post(self::DEFAULT_API_URL, [
+        return $this->client->post(sprintf(self::API_URL, $this->projectName), [
             'headers' => [
                 'Authorization' => sprintf('Bearer %s', $this->apiKey),
-                'body' => json_encode($formsParams)
-            ]
+                'Content-Type' => 'application/json'
+            ],
+            'json' => ['message' => $formsParams]
         ]);
     }
 
     private function fillNotifications(array $requestParams): array
     {
         if ($this->androidNotification) {
-            $this->notificationCheck = true;
             $requestParams['android'] = $this->androidNotification->toArray();
         }
         if ($this->apnsNotification) {
-            $this->notificationCheck = true;
             $requestParams['apns'] = $this->apnsNotification->toArray();
         }
         if ($this->webPushNotification) {
-            $this->notificationCheck = true;
             $requestParams['webpush'] = $this->webPushNotification->toArray();
         }
 
@@ -147,7 +132,8 @@ class Client
     }
 
     private function setNotification(BaseNotification $notification) {
-        switch ($notification) {
+        $this->notification = $notification;
+        switch (get_class($notification)) {
             case AndroidNotification::class:
                 $this->androidNotification = $notification;
                 break;
@@ -156,9 +142,6 @@ class Client
                 break;
             case WebPushNotification::class:
                 $this->webPushNotification = $notification;
-                break;
-            default:
-                $this->notification = $notification;
                 break;
         }
     }
