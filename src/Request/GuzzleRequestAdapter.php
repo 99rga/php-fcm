@@ -21,7 +21,12 @@ class GuzzleRequestAdapter implements RequestInterface
      */
     public function post(string $url, array $headers = [], array $data = []): ResponseInterface
     {
-
+        return $this->getGuzzleClient()->post($url, [
+            'headers' => [
+                $headers,
+            ],
+            'json'    => ['message' => $data],
+        ]);
     }
 
     /**
@@ -33,7 +38,6 @@ class GuzzleRequestAdapter implements RequestInterface
      */
     public function get(string $url, array $headers = [], array $data = []): ResponseInterface
     {
-
     }
 
     /**

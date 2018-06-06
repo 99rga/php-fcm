@@ -103,13 +103,14 @@ class Client
         ];
         $formsParams = $this->fillNotifications($formsParams);
 
-        return $this->request->post(sprintf(self::API_URL, $this->accessToken->getObtainer()->getProjectName()), [
-            'headers' => [
+        return $this->request->post(
+            sprintf(self::API_URL, $this->accessToken->getObtainer()->getProjectName()),
+            [
                 'Authorization' => sprintf('Bearer %s', $this->accessToken->getAccessToken()),
                 'Content-Type' => 'application/json'
             ],
-            'json' => ['message' => $formsParams]
-        ]);
+            $formsParams
+        );
     }
 
     private function fillNotifications(array $requestParams): array
