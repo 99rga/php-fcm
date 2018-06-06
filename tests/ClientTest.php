@@ -2,7 +2,7 @@
 
 namespace g9rga\phpFcm\tests;
 
-use g9rga\phpFcm\src\Client;
+use g9rga\phpFcm\src\Request;
 use g9rga\phpFcm\src\Notification\AndroidNotification;
 use g9rga\phpFcm\src\Target\TokenTarget;
 use Google\Auth\Credentials\ServiceAccountJwtAccessCredentials;

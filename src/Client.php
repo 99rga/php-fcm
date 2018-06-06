@@ -2,6 +2,7 @@
 
 namespace g9rga\phpFcm\src;
 
+use g9rga\phpFcm\src\AccessToken\AccessTokenAwareInterface;
 use g9rga\phpFcm\src\Cache\InMemoryCache;
 use g9rga\phpFcm\src\Notification\AndroidNotification;
 use g9rga\phpFcm\src\Notification\ApnsNotification;
@@ -15,11 +16,6 @@ use Psr\SimpleCache\CacheInterface;
 class Client
 {
     private const API_URL = 'https://fcm.googleapis.com/v1/projects/%s/messages:send';
-
-    /**
-     * @var string
-     */
-    private $apiKey;
 
     /**
      * @var RequestInterface
@@ -47,27 +43,26 @@ class Client
     private $notification;
 
     /**
-     * @var string
-     */
-    private $projectName;
-
-    /**
      * @var CacheInterface
      */
     private $cache;
 
     /**
-     * Client constructor
-     * @param RequestInterface $request
-     * @param string $apiKey
-     * @param string $projectName
+     * @var AccessTokenAwareInterface
      */
-    public function __construct(RequestInterface $request, string $apiKey, string $projectName)
+    private $accessToken;
+
+    /**
+     * Client constructor
+     *
+     * @param RequestInterface $request
+     * @param AccessTokenAwareInterface $accessToken
+     */
+    public function __construct(RequestInterface $request, AccessTokenAwareInterface $accessToken)
     {
         $this->request = $request;
         $this->cache = new InMemoryCache();
-        $this->apiKey = $apiKey;
-        $this->projectName = $projectName;
+        $this->accessToken = $accessToken;
     }
 
     /**
@@ -108,9 +103,9 @@ class Client
         ];
         $formsParams = $this->fillNotifications($formsParams);
 
-        return $this->request->sendPost(sprintf(self::API_URL, $this->projectName), [
+        return $this->request->post(sprintf(self::API_URL, $this->accessToken->getObtainer()->getProjectName()), [
             'headers' => [
-                'Authorization' => sprintf('Bearer %s', $this->apiKey),
+                'Authorization' => sprintf('Bearer %s', $this->accessToken->getAccessToken()),
                 'Content-Type' => 'application/json'
             ],
             'json' => ['message' => $formsParams]

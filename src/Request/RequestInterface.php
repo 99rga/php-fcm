@@ -6,5 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 
 interface RequestInterface
 {
-    public function sendPost(string $url, array $headers = [], array $data = []): ResponseInterface;
+    public function post(string $url, array $headers = [], array $data = []): ResponseInterface;
+
+    public function get(string $url, array $headers = [], array $data = []): ResponseInterface;
 }
