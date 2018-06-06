@@ -99,7 +99,6 @@ class AndroidNotification extends BaseNotification
                 'title_loc_args' => $this->titleLocArgs
             ]
         ];
-
         if ($this->data) {
             $data['data'] = $this->data;
         }

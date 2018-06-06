@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b448ffbaaa93ae921885569f88519e89",
+    "content-hash": "31f6ba3faa44f8246628c14ac001dd9e",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -58,12 +58,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client.git",
-                "reference": "ceb9e53f70bf16a39f7334f7910ac8c5180f1760"
+                "reference": "de3bd7a68e89e4d4509e39e7b8e529e712c1173c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/ceb9e53f70bf16a39f7334f7910ac8c5180f1760",
-                "reference": "ceb9e53f70bf16a39f7334f7910ac8c5180f1760",
+                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/de3bd7a68e89e4d4509e39e7b8e529e712c1173c",
+                "reference": "de3bd7a68e89e4d4509e39e7b8e529e712c1173c",
                 "shasum": ""
             },
             "require": {
@@ -109,7 +109,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-04-13T18:18:59+00:00"
+            "time": "2018-06-06T01:25:42+00:00"
         },
         {
             "name": "google/apiclient-services",
@@ -383,12 +383,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
+                "reference": "6e794d32f927fd25610001be05557169e8b51989"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
-                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/6e794d32f927fd25610001be05557169e8b51989",
+                "reference": "6e794d32f927fd25610001be05557169e8b51989",
                 "shasum": ""
             },
             "require": {
@@ -453,7 +453,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2017-06-19T01:22:40+00:00"
+            "time": "2018-06-05T08:23:38+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -1406,12 +1406,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "ddd3bcc3d1061d1afcdf1e1f3b8e8573e9b7ecc4"
+                "reference": "711ca0c13c66f6b66c2ecb586e56415815034330"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/ddd3bcc3d1061d1afcdf1e1f3b8e8573e9b7ecc4",
-                "reference": "ddd3bcc3d1061d1afcdf1e1f3b8e8573e9b7ecc4",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/711ca0c13c66f6b66c2ecb586e56415815034330",
+                "reference": "711ca0c13c66f6b66c2ecb586e56415815034330",
                 "shasum": ""
             },
             "require": {
@@ -1447,7 +1447,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2018-05-15T05:50:16+00:00"
+            "time": "2018-06-06T10:32:05+00:00"
         },
         {
             "name": "phpunit/phpunit",

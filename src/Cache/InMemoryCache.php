@@ -2,9 +2,10 @@
 
 namespace g9rga\phpFcm\src\Cache;
 
+use g9rga\phpFcm\src\Exception\NotImplementedException;
 use Psr\SimpleCache\CacheInterface;
 
-class NullCache implements CacheInterface
+class InMemoryCache implements CacheInterface
 {
     /**
      * @var array
@@ -15,13 +16,13 @@ class NullCache implements CacheInterface
      * @param string $key
      * @param null   $default
      *
-     * @return mixed|void
+     * @return mixed|null
      */
     public function get($key, $default = null)
     {
         $data = $this->cacheData[$key] ?? null;
         if (!$data || $data['expired'] < time()) {
-            return;
+            return null;
         } else {
             return $data;
         }
@@ -48,7 +49,7 @@ class NullCache implements CacheInterface
      */
     public function delete($key)
     {
-        // TODO: Implement delete() method.
+        unset($this->cacheData[$key]);
     }
 
     /**
@@ -56,18 +57,18 @@ class NullCache implements CacheInterface
      */
     public function clear()
     {
-        // TODO: Implement clear() method.
+        $this->cacheData = [];
     }
 
     /**
      * @param iterable $keys
      * @param null     $default
-     *
      * @return iterable|void
+     * @throws NotImplementedException
      */
     public function getMultiple($keys, $default = null)
     {
-        // TODO: Implement getMultiple() method.
+        throw new NotImplementedException();
     }
 
     /**
@@ -75,29 +76,30 @@ class NullCache implements CacheInterface
      * @param null     $ttl
      *
      * @return bool|void
+     * @throws NotImplementedException
      */
     public function setMultiple($values, $ttl = null)
     {
-        // TODO: Implement setMultiple() method.
+        throw new NotImplementedException();
     }
 
     /**
      * @param iterable $keys
-     *
      * @return bool|void
+     * @throws NotImplementedException
      */
     public function deleteMultiple($keys)
     {
-        // TODO: Implement deleteMultiple() method.
+        throw new NotImplementedException();
     }
 
     /**
      * @param string $key
      *
-     * @return bool|void
+     * @return bool
      */
     public function has($key)
     {
-        // TODO: Implement has() method.
+        return isset($this->cacheData[$key]) && $this->cacheData[$key]['expired'] > time();
     }
 }

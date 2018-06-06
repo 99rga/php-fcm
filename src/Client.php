@@ -2,13 +2,13 @@
 
 namespace g9rga\phpFcm\src;
 
-use g9rga\phpFcm\src\Cache\NullCache;
+use g9rga\phpFcm\src\Cache\InMemoryCache;
 use g9rga\phpFcm\src\Notification\AndroidNotification;
 use g9rga\phpFcm\src\Notification\ApnsNotification;
 use g9rga\phpFcm\src\Notification\BaseNotification;
 use g9rga\phpFcm\src\Notification\WebPushNotification;
+use g9rga\phpFcm\src\Request\RequestInterface;
 use g9rga\phpFcm\src\Target\TargetInterface;
-use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;
 use Psr\SimpleCache\CacheInterface;
 
@@ -22,9 +22,9 @@ class Client
     private $apiKey;
 
     /**
-     * @var GuzzleClient
+     * @var RequestInterface
      */
-    private $client;
+    private $request;
 
     /**
      * @var AndroidNotification
@@ -58,33 +58,34 @@ class Client
 
     /**
      * Client constructor
+     * @param RequestInterface $request
      * @param string $apiKey
      * @param string $projectName
      */
-    public function __construct(string $apiKey, string $projectName)
+    public function __construct(RequestInterface $request, string $apiKey, string $projectName)
     {
-        $this->client = new GuzzleClient();
+        $this->request = $request;
+        $this->cache = new InMemoryCache();
         $this->apiKey = $apiKey;
         $this->projectName = $projectName;
-        $this->cache = new NullCache();
     }
 
     /**
-     * @return GuzzleClient
+     * @return RequestInterface
      */
-    public function getClient(): GuzzleClient
+    public function getClient(): RequestInterface
     {
-        return $this->client;
+        return $this->request;
     }
 
     /**
-     * @param GuzzleClient $client
+     * @param RequestInterface $client
      *
      * @return $this
      */
-    public function setClient(GuzzleClient $client)
+    public function setClient(RequestInterface $client)
     {
-        $this->client = $client;
+        $this->request = $client;
 
         return $this;
     }
@@ -105,9 +106,9 @@ class Client
                 'body' => $this->notification->getBody()
             ]
         ];
-
         $formsParams = $this->fillNotifications($formsParams);
-        return $this->client->post(sprintf(self::API_URL, $this->projectName), [
+
+        return $this->request->sendPost(sprintf(self::API_URL, $this->projectName), [
             'headers' => [
                 'Authorization' => sprintf('Bearer %s', $this->apiKey),
                 'Content-Type' => 'application/json'
@@ -144,5 +145,17 @@ class Client
                 $this->webPushNotification = $notification;
                 break;
         }
+    }
+
+    /**
+     * @param CacheInterface $cache
+     *
+     * @return $this
+     */
+    public function setCache(CacheInterface $cache)
+    {
+        $this->cache = $cache;
+
+        return $this;
     }
 }
