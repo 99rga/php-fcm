@@ -2,35 +2,49 @@
 
 namespace g9rga\phpFcm\src\AccessToken;
 
-class Obtainer implements ObtainerInterface
+class FileObtainer implements ObtainerInterface
 {
-    public function getAccessToken(): string
+    /**
+     * @var array
+     */
+    private $fileData;
+
+    /**
+     * Obtainer constructor.
+     *
+     * @param string $filePath
+     */
+    public function __construct(string $filePath)
     {
-        // TODO: Implement getAccessToken() method.
+        if (!file_exists($filePath)) {
+            throw new \InvalidArgumentException('File doesn\'t exist: ' . $filePath);
+        }
+
+        $this->fileData = json_decode(file_get_contents($filePath), true);
     }
 
     public function getAccountType(): string
     {
-        // TODO: Implement getAccountType() method.
+        return $this->fileData['type'];
     }
 
     public function getClientId(): string
     {
-        // TODO: Implement getClientId() method.
+        return $this->fileData['client_id'];
     }
 
     public function getClientEmail(): string
     {
-        // TODO: Implement getClientEmail() method.
+        return $this->fileData['client_email'];
     }
 
     public function getPrivateKey(): string
     {
-        // TODO: Implement getPrivateKey() method.
+        return $this->fileData['private_key'];
     }
 
     public function getProjectName(): string
     {
-        // TODO: Implement getProjectName() method.
+        return $this->fileData['project_id'];
     }
 }
