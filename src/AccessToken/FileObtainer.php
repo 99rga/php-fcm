@@ -20,7 +20,15 @@ class FileObtainer implements ObtainerInterface
             throw new \InvalidArgumentException('File doesn\'t exist: ' . $filePath);
         }
 
-        $this->fileData = json_decode(file_get_contents($filePath), true);
+        $this->fileData = @json_decode(file_get_contents($filePath), true);
+        $requiredKeys = ['type', 'client_id', 'client_email', 'private_key', 'project_id'];
+        if (!$this->fileData) {
+            throw new \InvalidArgumentException('Wrong file format, json required');
+        }
+
+        if ($keys = array_diff($requiredKeys, array_keys($this->fileData))) {
+            throw new \InvalidArgumentException('Missing keys: %s', implode(',', $keys));
+        }
     }
 
     public function getAccountType(): string

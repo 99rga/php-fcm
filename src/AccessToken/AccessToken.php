@@ -24,6 +24,11 @@ class AccessToken implements AccessTokenAwareInterface
     private $obtainer;
 
     /**
+     * @var \Google_Client
+     */
+    private $googleClient;
+
+    /**
      * Obtainer constructor.
      * @param ObtainerInterface
      */
@@ -31,6 +36,7 @@ class AccessToken implements AccessTokenAwareInterface
     {
         $this->obtainer = $obtainer;
         $this->cache = new InMemoryCache();
+        $this->googleClient = new \Google_Client();
     }
 
     public function getObtainer(): ObtainerInterface
@@ -52,16 +58,15 @@ class AccessToken implements AccessTokenAwareInterface
 
     private function refreshAccessToken(ObtainerInterface $obtainer)
     {
-        $googleClient = new \Google_Client();
-        $googleClient->setAuthConfig([
+        $this->googleClient->setAuthConfig([
             'type' => $obtainer->getAccountType(),
             'client_id' => $obtainer->getClientId(),
             'client_email' => $obtainer->getClientEmail(),
             'private_key' => $obtainer->getPrivateKey(),
         ]);
-        $googleClient->setScopes([self::SCOPE]);
+        $this->googleClient->setScopes([self::SCOPE]);
 
-        return $googleClient->fetchAccessTokenWithAssertion();
+        return $this->googleClient->fetchAccessTokenWithAssertion();
     }
     
     /**
@@ -72,6 +77,18 @@ class AccessToken implements AccessTokenAwareInterface
     public function setCache(CacheInterface $cache)
     {
         $this->cache = $cache;
+
+        return $this;
+    }
+
+    /**
+     * @param \Google_Client $googleClient
+     *
+     * @return $this
+     */
+    public function setGoogleClient(\Google_Client $googleClient)
+    {
+        $this->googleClient = $googleClient;
 
         return $this;
     }

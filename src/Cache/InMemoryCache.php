@@ -24,7 +24,7 @@ class InMemoryCache implements CacheInterface
         if (!$data || $data['expired'] < time()) {
             return null;
         } else {
-            return $data;
+            return $data['value'];
         }
     }
 
@@ -37,9 +37,10 @@ class InMemoryCache implements CacheInterface
      */
     public function set($key, $value, $ttl = null)
     {
-        $data = $this->cacheData[$key] ?? [];
+        $data = [];
         $data['expired'] = time() + $ttl;
         $data['value'] = $value;
+        $this->cacheData[$key] = $data;
     }
 
     /**
