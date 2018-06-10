@@ -28,7 +28,8 @@ $accessToken = new AccessToken($obtainer);
 
 
 /*
-    Client requires Request adapter to make requests, you can use GuzzleRequestAdapter or you own implementation RequestInterface
+    Client requires Request adapter to make requests.
+    You can use GuzzleRequestAdapter or you own implementation RequestInterface
 */
 $guzzleRequest = new GuzzleRequestAdapter();
 $guzzleRequest->setGuzzleClient(new \GuzzleHttp\Client());
