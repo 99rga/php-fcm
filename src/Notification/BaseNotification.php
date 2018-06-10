@@ -7,12 +7,12 @@ class BaseNotification implements ArrayInterface
     /**
      * @var string
      */
-    private $title;
+    private $title = '';
 
     /**
      * @var string
      */
-    private $body;
+    private $body = '';
 
     /**
      * @return array

@@ -13,7 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class Client
 {
-    private const API_URL = 'https://fcm.googleapis.com/v1/projects/%s/messages:send';
+    const API_URL = 'https://fcm.googleapis.com/v1/projects/%s/messages:send';
 
     /**
      * @var RequestInterface
