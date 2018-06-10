@@ -6,17 +6,41 @@ Php library to send push notification via google fcm with guzzle
 
 ## Usage example
 ```php
+use g9rga\phpFcm\src\AccessToken\FileObtainer;
+use g9rga\phpFcm\src\AccessToken\AccessToken;
 use g9rga\phpFcm\src\Client;
 use g9rga\phpFcm\src\Notification\AndroidNotification;
 use g9rga\phpFcm\src\Target\TokenTarget;
 
-$apiKey = 'YOUR_SERVER_KEY';
-$client = new Client($apiKey);
+/*
+    To retrieve access token you can use builtin FileObtainer class
+    or your own class by implementeting ObtainerInterface
+*/
+$obtainer = new FileObtainer('path_with_credentials');
 
-$notification = new AndroidNotification();
-$target = new TokenTarget('CLIENT_TOKEN');
+$accessToken = new AccessToken($obtainer);
 
-$client->send($target, $notification);
+/*
+    Optionally you can pass your own PSR-16 cache adapter to cache access token
+    InMemoryCache used by default
+    $accessToken->setCache();
+*/
+
+
+/*
+    Client requires Request adapter to make requests, you can use GuzzleRequestAdapter or you own implementation RequestInterface
+*/
+$guzzleRequest = new GuzzleRequestAdapter();
+$guzzleRequest->setGuzzleClient(new \GuzzleHttp\Client());
+
+$target = new TokenTarget('client_token');
+
+$androidNotification = new AndroidNotification();
+$androidNotification->setTitle('Push notification title');
+$androidNotification->setBody('Push notification body');
+
+$client = new Client($guzzleRequest, $accessToken);
+$result = $client->send($target, $androidNotification);
 ```
 
 
