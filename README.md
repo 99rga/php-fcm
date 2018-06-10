@@ -16,7 +16,23 @@ use g9rga\phpFcm\src\Target\TokenTarget;
     To retrieve access token you can use builtin FileObtainer class
     or your own class by implementeting ObtainerInterface
 */
-$obtainer = new FileObtainer('path_with_credentials');
+/*
+    File content example:
+    {
+      "type": "service_account",
+      "project_id": "project___",
+      "private_key_id": "",
+      "private_key": "",
+      "client_email": "",
+      "client_id": "",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://accounts.google.com/o/oauth2/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": ""
+    }
+
+*/
+$obtainer = new FileObtainer('crentials_file_path');
 
 $accessToken = new AccessToken($obtainer);
 
