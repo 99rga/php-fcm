@@ -42,7 +42,7 @@ class AccessToken implements AccessTokenAwareInterface
     {
         $accessToken = $this->cache->get(self::ACCESS_TOKEN_CACHE_KEY);
         if ($accessToken) {
-            return $accessToken;
+            return $accessToken['access_token'];
         }
         $result = $this->refreshAccessToken($this->obtainer);
         $accessToken = $result['access_token'];

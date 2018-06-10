@@ -2,6 +2,7 @@
 
 namespace g9rga\phpFcm\src\Request;
 
+use g9rga\phpFcm\src\Exception\NotImplementedException;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 
@@ -22,9 +23,7 @@ class GuzzleRequestAdapter implements RequestInterface
     public function post(string $url, array $headers = [], array $data = []): ResponseInterface
     {
         return $this->getGuzzleClient()->post($url, [
-            'headers' => [
-                $headers,
-            ],
+            'headers' => $headers,
             'json'    => ['message' => $data],
         ]);
     }
@@ -33,11 +32,12 @@ class GuzzleRequestAdapter implements RequestInterface
      * @param string $url
      * @param array  $headers
      * @param array  $data
-     *
+     * @throws NotImplementedException
      * @return ResponseInterface
      */
     public function get(string $url, array $headers = [], array $data = []): ResponseInterface
     {
+        throw new NotImplementedException();
     }
 
     /**

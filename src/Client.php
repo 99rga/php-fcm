@@ -3,7 +3,6 @@
 namespace g9rga\phpFcm\src;
 
 use g9rga\phpFcm\src\AccessToken\AccessTokenAwareInterface;
-use g9rga\phpFcm\src\Cache\InMemoryCache;
 use g9rga\phpFcm\src\Notification\AndroidNotification;
 use g9rga\phpFcm\src\Notification\ApnsNotification;
 use g9rga\phpFcm\src\Notification\BaseNotification;
@@ -11,7 +10,6 @@ use g9rga\phpFcm\src\Notification\WebPushNotification;
 use g9rga\phpFcm\src\Request\RequestInterface;
 use g9rga\phpFcm\src\Target\TargetInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\SimpleCache\CacheInterface;
 
 class Client
 {
@@ -43,11 +41,6 @@ class Client
     private $notification;
 
     /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
      * @var AccessTokenAwareInterface
      */
     private $accessToken;
@@ -61,7 +54,6 @@ class Client
     public function __construct(RequestInterface $request, AccessTokenAwareInterface $accessToken)
     {
         $this->request = $request;
-        $this->cache = new InMemoryCache();
         $this->accessToken = $accessToken;
     }
 
@@ -141,17 +133,5 @@ class Client
                 $this->webPushNotification = $notification;
                 break;
         }
-    }
-
-    /**
-     * @param CacheInterface $cache
-     *
-     * @return $this
-     */
-    public function setCache(CacheInterface $cache)
-    {
-        $this->cache = $cache;
-
-        return $this;
     }
 }
